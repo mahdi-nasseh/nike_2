@@ -6,3 +6,9 @@ sealed class PaymentReceiptEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class PaymentReceiptStarted extends PaymentReceiptEvent {
+  final int orderId;
+
+  const PaymentReceiptStarted({required this.orderId});
+}

@@ -44,6 +44,7 @@ dependencies:
   flutter_svg: ^2.0.17
   pull_to_refresh_flutter3: ^2.0.2
   intl: ^0.20.2
+  webview_flutter: ^4.10.0
 
 dev_dependencies:
   flutter_test:

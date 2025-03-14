@@ -7,6 +7,7 @@ import 'package:nike_2/data/order.dart';
 import 'package:nike_2/data/repo/order_repository.dart';
 import 'package:nike_2/theme.dart';
 import 'package:nike_2/ui/cart/cart_price_info.dart';
+import 'package:nike_2/ui/payment_webview/payment_webview.dart';
 import 'package:nike_2/ui/receipt/receipt.dart';
 import 'package:nike_2/ui/shipping/bloc/shipping_bloc.dart';
 
@@ -39,8 +40,8 @@ class _ShippingScreenState extends State<ShippingScreen> {
 
   final TextEditingController mobileController =
       TextEditingController(text: '01234567890');
-       StreamSubscription? subscription;
-  
+  StreamSubscription? subscription;
+
   @override
   void dispose() {
     subscription?.cancel();
@@ -62,8 +63,22 @@ class _ShippingScreenState extends State<ShippingScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(state.exception.message)));
             } else if (state is ShippingSuccess) {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => PaymentReceiptScreen()));
+              if (state.result.bankGatewayUrl.isNotEmpty) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => PaymentScreen(
+                        bankGatewayUrl: state.result.bankGatewayUrl),
+                  ),
+                );
+              } else {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => PaymentReceiptScreen(
+                      orderId: state.result.orderId,
+                    ),
+                  ),
+                );
+              }
             }
           });
           return bloc;
@@ -147,7 +162,20 @@ class _ShippingScreenState extends State<ShippingScreen> {
                               width: 16,
                             ),
                             ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                BlocProvider.of<ShippingBloc>(context).add(
+                                  ShippingCreateOrder(
+                                    params: CreateOrderParams(
+                                        firstName: firstNameController.text,
+                                        lastName: lastNameController.text,
+                                        mobile: mobileController.text,
+                                        postalCode: postalCodeController.text,
+                                        address: addressController.text,
+                                        paymentMethodes:
+                                            PaymentMethodes.online),
+                                  ),
+                                );
+                              },
                               style: ButtonStyle(
                                   shape: WidgetStatePropertyAll(
                                       RoundedRectangleBorder(
