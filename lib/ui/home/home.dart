@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:nike_2/common/utils.dart';
+import 'package:nike_2/data/product.dart';
 import 'package:nike_2/data/repo/banner_repository.dart';
 import 'package:nike_2/data/repo/product_repository.dart';
 import 'package:nike_2/ui/home/bloc/home_bloc.dart';
+import 'package:nike_2/ui/list/list.dart';
 import 'package:nike_2/ui/widgets/banner_slider.dart';
 import 'package:nike_2/ui/widgets/error.dart';
 import 'package:nike_2/ui/widgets/product_slider.dart';
@@ -49,14 +51,28 @@ class HomeScreen extends StatelessWidget {
                           themeData: themeData,
                           products: state.latestProducts,
                           title: 'جدیدترین',
-                          seeAllMethode: () {},
+                          seeAllMethode: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ProductListScreen(sort: ProductSort.latest),
+                              ),
+                            );
+                          },
                         );
                       case 4:
                         return ProductSlider(
                           themeData: themeData,
                           products: state.popularProducts,
                           title: 'پربازدیدترین',
-                          seeAllMethode: () {},
+                          seeAllMethode: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => ProductListScreen(
+                                    sort: ProductSort.popular),
+                              ),
+                            );
+                          },
                         );
                       default:
                         return Container();

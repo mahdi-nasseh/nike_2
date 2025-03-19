@@ -21,4 +21,11 @@ class ProductSort {
   static const popular = 1;
   static const priceHighToLow = 2;
   static const priceLowToHigh = 3;
+
+  static const List<String> names = [
+    'جدیدترین',
+    'محبوب‌ترین',
+    'گران‌ترین',
+    'ارزان‌ترین',
+  ];
 }

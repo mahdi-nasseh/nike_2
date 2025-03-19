@@ -10,10 +10,14 @@ class Product extends StatelessWidget {
     super.key,
     required this.product,
     required this.borderRadius,
+    this.itemHeight = 189,
+    this.itemWidth = 176,
   });
 
   final ProductEntity product;
   final BorderRadius borderRadius;
+  final double itemHeight;
+  final double itemWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +40,8 @@ class Product extends StatelessWidget {
           children: [
             Stack(
               children: [
-                SizedBox(
-                  height: 189,
-                  width: 176,
+                AspectRatio(
+                 aspectRatio: 0.93,
                   child: ImageLoadingService(
                     imageUrl: product.imageUrl,
                     borderRadius: borderRadius,

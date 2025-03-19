@@ -52,6 +52,7 @@ class MyApp extends StatelessWidget {
               color: LightThemeColors.secondaryTextColor),
           titleLarge: defaultTextStyle.copyWith(fontWeight: FontWeight.bold),
           labelLarge: defaultTextStyle,
+          titleMedium: defaultTextStyle.copyWith(fontWeight: FontWeight.bold, fontSize: 16)
         ),
         colorScheme: ColorScheme.light(
           primary: LightThemeColors.primaryColor,
