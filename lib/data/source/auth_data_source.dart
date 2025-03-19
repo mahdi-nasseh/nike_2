@@ -25,7 +25,8 @@ class AuthRemoteDataSource with HttpValidateRespnse implements IAuthDataSource {
     validateResponse(response);
     return AuthInfo(
         refreshToken: response.data['refresh_token'],
-        accessToken: response.data['access_token']);
+        accessToken: response.data['access_token'],
+        email: username);
   }
 
   @override
@@ -40,7 +41,9 @@ class AuthRemoteDataSource with HttpValidateRespnse implements IAuthDataSource {
 
     return AuthInfo(
         refreshToken: response.data['refresh_token'],
-        accessToken: response.data['access_token']);
+      accessToken: response.data['access_token'],
+      email: '',
+    );
   }
 
   @override

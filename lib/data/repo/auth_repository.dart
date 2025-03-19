@@ -15,7 +15,8 @@ abstract class IAuthRepository {
 }
 
 class AuthRepository implements IAuthRepository {
-  static final ValueNotifier<AuthInfo?> authChangeNotifire = ValueNotifier(null);
+  static final ValueNotifier<AuthInfo?> authChangeNotifire =
+      ValueNotifier(null);
   final IAuthDataSource dataSource;
 
   AuthRepository({required this.dataSource});
@@ -35,7 +36,7 @@ class AuthRepository implements IAuthRepository {
   Future<void> refreshToken() async {
     final AuthInfo authInfo =
         await dataSource.refreshToken(authChangeNotifire.value!.refreshToken);
-        debugPrint("Refresh Token is: ${authInfo.refreshToken};");
+    debugPrint("Refresh Token is: ${authInfo.refreshToken};");
     _persistsAuthTokens(authInfo);
   }
 
@@ -45,6 +46,7 @@ class AuthRepository implements IAuthRepository {
 
     sharedPreferences.setString('refresh_token', authInfo.refreshToken);
     sharedPreferences.setString('access_token', authInfo.accessToken);
+    sharedPreferences.setString('email', authInfo.email);
     loadAuthInfo();
   }
 
@@ -55,10 +57,12 @@ class AuthRepository implements IAuthRepository {
         sharedPreferences.getString('access_token') ?? '';
     final String refreshToken =
         sharedPreferences.getString('refresh_token') ?? '';
-
+    final String email = sharedPreferences.getString('email') ?? '';
     if (accessToken.isNotEmpty && refreshToken.isNotEmpty) {
-      authChangeNotifire.value =
-          AuthInfo(refreshToken: refreshToken, accessToken: accessToken);
+      authChangeNotifire.value = AuthInfo(
+          refreshToken: refreshToken,
+          accessToken: accessToken,
+          email: email);
     }
   }
 
