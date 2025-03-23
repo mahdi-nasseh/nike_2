@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:nike_2/common/utils.dart';
-import 'package:nike_2/data/favorite_manager.dart';
 import 'package:nike_2/data/product.dart';
 import 'package:nike_2/theme.dart';
 import 'package:nike_2/ui/product/detail.dart';
 import 'package:nike_2/ui/widgets/image.dart';
 
 class FavoriteScreen extends StatelessWidget {
-  FavoriteScreen({
+  const FavoriteScreen({
     super.key,
   });
 
