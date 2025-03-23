@@ -9,7 +9,11 @@ class OrderHistoryScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('سوابق سفارش'),
       ),
-      body: ListView.builder(itemBuilder: (context, index) {return Container();}),
+      body: ListView.builder(
+        itemBuilder: (context, index) {
+          return Container();
+        },
+      ),
     );
   }
 }
