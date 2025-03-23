@@ -1,14 +1,16 @@
+import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:nike_2/data/product.dart';
 
 class FavoriteManager {
   static const String boxName = 'favorite';
   final box = Hive.box<ProductEntity>(boxName);
-
+  ValueListenable<Box<ProductEntity>> get listenable =>
+      Hive.box<ProductEntity>(boxName).listenable();
   static init() async {
     await Hive.initFlutter();
-    Hive.registerAdapter(ProductEntityAdapter());
-    Hive.openBox(boxName);
+    Hive.registerAdapter<ProductEntity>(ProductEntityAdapter());
+    Hive.openBox<ProductEntity>(boxName);
   }
 
   void addFavorite(ProductEntity product) {

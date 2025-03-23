@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nike_2/common/utils.dart';
+import 'package:nike_2/data/favorite_manager.dart';
 import 'package:nike_2/data/product.dart';
 import 'package:nike_2/data/repo/auth_repository.dart';
 import 'package:nike_2/data/repo/cart_repository.dart';
@@ -11,6 +12,8 @@ import 'package:nike_2/theme.dart';
 import 'package:nike_2/ui/cart/bloc/cart_bloc.dart';
 import 'package:nike_2/ui/product/bloc/product_bloc.dart';
 import 'package:nike_2/ui/widgets/image.dart';
+
+final FavoriteManager favoriteManager = FavoriteManager();
 
 class DetailScreen extends StatefulWidget {
   const DetailScreen({super.key, required this.product});
@@ -99,11 +102,21 @@ class _DetailScreenState extends State<DetailScreen> {
                   SliverAppBar(
                     actions: [
                       IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            CupertinoIcons.heart,
-                            size: 22,
-                          )),
+                          onPressed: () {
+                            if (favoriteManager.isFavorite(widget.product)) {
+                              favoriteManager.removeFavorite(widget.product);
+                            } else {
+                              favoriteManager.addFavorite(widget.product);
+                            }
+                            setState(() {});
+                          },
+                          icon: favoriteManager.isFavorite(widget.product)
+                              ? Icon(
+                                  CupertinoIcons.heart_fill,
+                                  size: 22,
+                                  color: Colors.red,
+                                )
+                              : Icon(CupertinoIcons.heart)),
                     ],
                     flexibleSpace:
                         ImageLoadingService(imageUrl: widget.product.imageUrl),

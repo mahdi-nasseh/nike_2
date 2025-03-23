@@ -4,6 +4,7 @@ import 'package:nike_2/data/auth.dart';
 import 'package:nike_2/data/repo/auth_repository.dart';
 import 'package:nike_2/data/repo/cart_repository.dart';
 import 'package:nike_2/ui/auth/auth_screen.dart';
+import 'package:nike_2/ui/favorite/favorite_screen.dart';
 
 class ProfileSceen extends StatelessWidget {
   const ProfileSceen({super.key});
@@ -45,7 +46,13 @@ class ProfileSceen extends StatelessWidget {
                 thickness: 0.5,
               ),
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => FavoriteScreen(),
+                    ),
+                  );
+                },
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(16, 16, 0, 16),
                   child: Row(
@@ -104,28 +111,33 @@ class ProfileSceen extends StatelessWidget {
                     showDialog(
                       context: context,
                       builder: (context) {
-                        return AlertDialog(
-                          title: Text(
-                            'خروج از حساب کاربری',
-                            style: themeData.textTheme.titleLarge,
+                        return Directionality(
+                          textDirection: TextDirection.rtl,
+                          child: AlertDialog(
+                            title: Text(
+                              'خروج از حساب کاربری',
+                              style: themeData.textTheme.titleLarge,
+                            ),
+                            content:
+                                Text('آیا می‌خواهید از حساب خود خارج شوید؟'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('خیر'),
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                  Navigator.of(context).pop();
+                                  CartRepository.cartItemCountNotifire.value =
+                                      0;
+                                  await authRepository.signout();
+                                },
+                                child: Text('بله'),
+                              ),
+                            ],
                           ),
-                          content: Text('آیا می‌خواهید از حساب خود خارج شوید؟'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text('خیر'),
-                            ),
-                            TextButton(
-                              onPressed: () async {
-                                Navigator.of(context).pop();
-                                CartRepository.cartItemCountNotifire.value = 0;
-                                await authRepository.signout();
-                              },
-                              child: Text('بله'),
-                            ),
-                          ],
                         );
                       },
                     );

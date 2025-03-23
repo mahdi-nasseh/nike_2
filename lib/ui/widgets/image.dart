@@ -14,7 +14,7 @@ class ImageLoadingService extends StatelessWidget {
       fit: BoxFit.cover,
       alignment: Alignment.center,
       errorWidget: (context, url, error) => Text(
-          "خطا در بارگزاری تصویر مربوطه"),
+          "خطا در بارگزاری تصویر"),
     );
 
     return ClipRRect(

@@ -1,11 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:nike_2/common/utils.dart';
+import 'package:nike_2/data/favorite_manager.dart';
 import 'package:nike_2/data/product.dart';
 import 'package:nike_2/ui/product/detail.dart';
 import 'package:nike_2/ui/widgets/image.dart';
 
-class Product extends StatelessWidget {
+final favoriteManager = FavoriteManager();
+
+class Product extends StatefulWidget {
   const Product({
     super.key,
     required this.product,
@@ -20,17 +24,22 @@ class Product extends StatelessWidget {
   final double itemWidth;
 
   @override
+  State<Product> createState() => _ProductState();
+}
+
+class _ProductState extends State<Product> {
+  @override
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
     return SizedBox(
       width: 176,
       child: InkWell(
-        borderRadius: borderRadius,
+        borderRadius: widget.borderRadius,
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => DetailScreen(
-                product: product,
+                product: widget.product,
               ),
             ),
           );
@@ -41,10 +50,10 @@ class Product extends StatelessWidget {
             Stack(
               children: [
                 AspectRatio(
-                 aspectRatio: 0.93,
+                  aspectRatio: 0.93,
                   child: ImageLoadingService(
-                    imageUrl: product.imageUrl,
-                    borderRadius: borderRadius,
+                    imageUrl: widget.product.imageUrl,
+                    borderRadius: widget.borderRadius,
                   ),
                 ),
                 Positioned(
@@ -56,9 +65,31 @@ class Product extends StatelessWidget {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                         color: Colors.white, shape: BoxShape.circle),
-                    child: Icon(
-                      CupertinoIcons.heart,
-                      size: 22,
+                    child: IconButton(
+                      padding: EdgeInsets.all(0),
+                      onPressed: () {
+                        if (favoriteManager.isFavorite(widget.product)) {
+                          favoriteManager.removeFavorite(widget.product);
+                        } else {
+                          favoriteManager.addFavorite(widget.product);
+                        }
+
+                        setState(() {});
+                      },
+                      icon: ValueListenableBuilder<Box<ProductEntity>>(
+                        valueListenable: favoriteManager.listenable,
+                        builder: (context, box, child) {
+                          return Icon(
+                            favoriteManager.isFavorite(widget.product)
+                                ? CupertinoIcons.heart_fill
+                                : CupertinoIcons.heart,
+                            size: 22,
+                            color: favoriteManager.isFavorite(widget.product)
+                                ? Colors.red
+                                : Colors.black,
+                          );
+                        }
+                      ),
                     ),
                   ),
                 ),
@@ -70,7 +101,7 @@ class Product extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Text(
-                product.title,
+                widget.product.title,
                 style: themeData.textTheme.bodyMedium!
                     .copyWith(fontWeight: FontWeight.bold)
                     .apply(fontSizeDelta: -0.5),
@@ -82,7 +113,7 @@ class Product extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Text(
-                product.previousPrice.withPriceLable,
+                widget.product.previousPrice.withPriceLable,
                 style: themeData.textTheme.bodySmall!.copyWith(
                     decoration: TextDecoration.lineThrough,
                     decorationColor: themeData.textTheme.bodySmall!.color),
@@ -93,7 +124,7 @@ class Product extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Text(
-                product.price.withPriceLable,
+                widget.product.price.withPriceLable,
                 style: themeData.textTheme.bodyMedium,
               ),
             ),
